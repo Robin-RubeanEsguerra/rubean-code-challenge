@@ -14,9 +14,10 @@ Angular frontend and Laravel API, run together with Docker Compose.
 ## Run with Docker (Recommended)
 
 ```bash
-git clone <your-repo-url>
-cd crm-online-test
-docker compose up --build
+1. git clone <rubean-code-challenge-repo-url>
+2. cd crm-online-test
+3. Update Frontend environment.ts to backendUrl: '/api'
+4. docker compose up --build
 
 Then open:
 - App: http://localhost
@@ -25,7 +26,6 @@ Then open:
 
 Stop with `Ctrl+C` or docker compose down
 
-For local mode, make it clearer:
 
 ```md
 ## Optional: Run Locally
@@ -40,41 +40,27 @@ For local mode, make it clearer:
     DB_USERNAME=postgres
     DB_PASSWORD=
     SEARCHER_URL=http://127.0.0.1:9200
+
 3. Update Frontend environment.ts
-    backendUrl: '/api'
+    backendUrl: 'http://127.0.0.1:8000/api'
 
 
-
-```md
-## Optional: Run Locally
-
-1. Copy `code-challenge-be/.env.example` to `code-challenge-be/.env`
-2. Update these values for local development:
-
-```env
-DB_CONNECTION=pgsql
-DB_HOST=localhost
-DB_PORT=5432
-DB_DATABASE=code-challenge-db
-DB_USERNAME=postgres
-DB_PASSWORD=
-SEARCHER_URL=http://127.0.0.1:9200
-
-3. Start Elasticsearch
+4. Start Elasticsearch
 docker compose up searcher
 
-4. Start backend
+5. Start backend
     cd code-challenge-be
     composer install
-    copy .env.example .env
     php artisan key:generate
     php artisan migrate
     php artisan serve
 
-5. Start frontend
+6. Start frontend
     cd code-challenge-fe
     npm install
     ng serve --open
 
-6. Update Frontend environment.ts
-    backendUrl: 'http://127.0.0.1:8000/api'
+Then open:
+- App: http://localhost:4200/
+- API example: http://127.0.0.1:8000/api/customers
+- Search: http://127.0.0.1:8000/api/customers?search=Jane

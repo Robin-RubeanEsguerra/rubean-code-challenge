@@ -27,6 +27,10 @@ export class CustomersView {
   ngOnInit() {
     const id = Number(this.route.snapshot.params['id']);
     this.editingId.set(id);
+    this.getOneCustomerData(id);
+  }
+
+  getOneCustomerData(id: number) {
     this.dataService.getOneCustomer(id).subscribe({
       next: (response) => {
         this.customer.set(response);
@@ -37,7 +41,9 @@ export class CustomersView {
           contact: response.contact,
         });
       },
-      error: (error) => console.error('Failed to fetch customer:', error),
+      error: (error) => {
+        this.showError(error, 'Failed to fetch customer');
+      },
     });
   }
   insertData(id: number | null) {
@@ -57,6 +63,7 @@ export class CustomersView {
     };
     this.dataService.updateCustomer(updatedCustomer).subscribe({
       next: (response) => {
+        this.getOneCustomerData(id ?? 0);
         this.isSubmitting.set(false);
         alert('Customer updated successfully');
       },
