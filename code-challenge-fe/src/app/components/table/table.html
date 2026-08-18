@@ -1,0 +1,122 @@
+<div class="row flex-md-row-reverse gx-3 gy-3">
+
+    <!-- Customer Add Form -->
+  <div class="col-12 col-md-4 px-3 ">
+   <div class="card p-3">
+     <h6 class="fw-bold fs-6">
+      {{ editingId ? 'Update Customer' : 'Add Customer' }}
+    </h6>
+    <form (ngSubmit)="insertData(editingId)" class="d-flex gap-1 gap-md-3 flex-column" [formGroup]="customerForm">
+      <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input type="text" name="first_name" class="form-control" formControlName="firstName" />
+      </div>
+      <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input type="text" name="last_name" class="form-control" formControlName="lastName" />
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" name="email" class="form-control" formControlName="email" />
+      </div>
+      <div class="form-group">
+        <label for="contact">Contact Number</label>
+        <input type="text" name="contact" class="form-control" formControlName="contact" />
+      </div>
+      <div class="d-flex gap-2 ">
+        <button type="submit" class="btn btn-sm btn-success w-100">
+          @if (isSubmitting()) {
+            <div class="d-flex justify-content-center align-items-center">
+              <app-spinner></app-spinner>
+            </div>
+          } @else {
+            {{ editingId ? 'Update' : 'Add' }}
+          }
+        </button>
+        <button type="button" class="btn btn-sm btn-secondary w-100" (click)="clearFields()">Clear</button>
+      </div>
+    </form>
+   </div>
+  </div>
+
+  <!-- Customer Table -->
+  <div class="col-12 col-md-8  p-0 border-light">
+    <div class="d-flex gap-2 mb-2">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search customers"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="getCustomersData()"
+      />
+      <button type="button" class="btn btn-sm btn-primary" (click)="getCustomersData()">
+        Search
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary"
+        (click)="searchQuery = ''; getCustomersData()"
+      >
+        Clear
+      </button>
+    </div>
+    <table class="table table-striped table-hover m-0 table-bordered">
+      <thead class="table-dark ">
+        <tr class="">
+          <th scope="col">#</th>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Email Address</th>
+          <th scope="col">Contact Number</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      @if (isLoading()) {
+        <tbody class="">
+          <tr>
+            <td colspan="6" class="text-center py-5">
+              <div class="d-flex justify-content-center align-items-center">
+                <app-spinner></app-spinner>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      } @else {
+        <tbody>
+          @for (customer of customers(); track customer.id) {
+            <tr>
+              <th scope="row">{{ customer.id }}</th>
+              <td>
+                <button
+                class="p-0 bg-transparent border-0 underline customer-link"
+                (click)="viewCustomer(customer.id)">
+                {{ customer.first_name }}
+              </button>
+              </td>
+              <td>{{ customer.last_name }}</td>
+              <td>{{ customer.email }}</td>
+              <td>{{ customer.contact }}</td>
+              <td class="d-flex gap-2">
+                <button class="btn btn-primary btn-sm" (click)="updateCustomerButton(customer)">
+                  Update
+                </button>
+
+                <button class="btn btn-danger btn-sm" (click)="deleteCustomerData(customer.id)">
+                  @if (deletingId() === customer.id) {
+                    <div class="d-flex justify-content-center align-items-center gap-2">
+                      <app-spinner></app-spinner>
+                    </div>
+                  } @else {
+                    Delete
+                  }
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      }
+    </table>
+  </div>
+
+
+</div>

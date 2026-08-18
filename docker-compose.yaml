@@ -1,0 +1,67 @@
+services:
+  controller:
+    build:
+      context: .
+      dockerfile: controller/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: ./code-challenge-be
+    environment:
+      APP_NAME: CRM
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost
+      DB_CONNECTION: pgsql
+      DB_HOST: database
+      DB_PORT: "5432"
+      DB_DATABASE: code-challenge-db
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+      SEARCHER_URL: http://searcher:9200
+    depends_on:
+      database:
+        condition: service_healthy
+      searcher:
+        condition: service_healthy
+
+  database:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: code-challenge-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - database_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d code-challenge-db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  searcher:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.1
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - searcher_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:9200 >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+
+volumes:
+  database_data:
+  searcher_data:

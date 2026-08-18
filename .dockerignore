@@ -1,0 +1,12 @@
+.git
+**/.git
+**/node_modules
+**/vendor
+**/dist
+**/.angular
+code-challenge-be/.env
+code-challenge-be/storage/logs
+code-challenge-be/storage/framework/cache/data
+code-challenge-be/storage/framework/sessions
+code-challenge-be/storage/framework/views
+**/*.md
