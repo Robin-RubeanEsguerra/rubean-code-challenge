@@ -32,6 +32,6 @@ RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh \
     && chmod +x /usr/local/bin/entrypoint.sh \
     && rm -f database/database.sqlite bootstrap/cache/config.php
 
-EXPOSE 8001
+EXPOSE 8000
 
 ENTRYPOINT ["entrypoint.sh"]

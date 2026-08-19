@@ -44,4 +44,4 @@ fi
 
 php artisan migrate --force --no-interaction
 
-exec php artisan serve --host=0.0.0.0 --port=8001
+exec php artisan serve --host=0.0.0.0 --port=8000

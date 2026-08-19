@@ -1,6 +1,6 @@
 # Code Challenge - Customer Manager
 
-Angular frontend and Laravel API, run together with Docker Compose. 
+Angular frontend and Laravel API, run together with Docker Compose.
 
 ## Services
 
@@ -13,54 +13,76 @@ Angular frontend and Laravel API, run together with Docker Compose.
 
 ## Run with Docker (Recommended)
 
+**Prerequisites:** Docker Desktop
+
 ```bash
-1. git clone <rubean-code-challenge-repo-url>
-2. cd crm-online-test
-3. Update Frontend environment.ts to backendUrl: '/api'
-4. docker compose up --build
+git clone https://github.com/Robin-RubeanEsguerra/rubean-code-challenge.git
+cd rubean-code-challenge
+docker compose up --build
+```
+
+The frontend is already set to Docker mode (`backendUrl: '/api'` in `code-challenge-fe/src/app/environments/environment.ts`).
 
 Then open:
+
 - App: http://localhost
 - API example: http://localhost/api/customers
 - Search: http://localhost/api/customers?search=Jane
 
-Stop with `Ctrl+C` or docker compose down
+Stop with `Ctrl+C`, then:
 
+```bash
+docker compose down
+```
 
-```md
 ## Optional: Run Locally
 
-1. Copy `code-challenge-be/.env.example` to `code-challenge-be/.env`
-2. Update these values for local development:
-    ```env
-    DB_CONNECTION=pgsql
-    DB_HOST=localhost
-    DB_PORT=5432
-    DB_DATABASE=code-challenge-db
-    DB_USERNAME=postgres
-    DB_PASSWORD=
-    SEARCHER_URL=http://127.0.0.1:9200
+**Prerequisites:** PHP, Composer, Node.js, a local PostgreSQL instance, and Docker Desktop (for Elasticsearch only).
 
-3. Update Frontend environment.ts
-    backendUrl: 'http://127.0.0.1:8000/api'
+1. Copy `code-challenge-be/.env.example` to `code-challenge-be/.env` and set:
 
+```env
+DB_CONNECTION=pgsql
+DB_HOST=localhost
+DB_PORT=5432
+DB_DATABASE=code-challenge-db
+DB_USERNAME=postgres
+DB_PASSWORD=
+SEARCHER_URL=http://127.0.0.1:9200
+```
 
-4. Start Elasticsearch
-    docker compose up searcher
+2. In `code-challenge-fe/src/app/environments/environment.ts`, use local mode:
 
-5. Start backend
-    cd code-challenge-be
-    composer install
-    php artisan key:generate
-    php artisan migrate
-    php artisan serve
+```ts
+backendUrl: 'http://127.0.0.1:8000/api'
+```
 
-6. Start frontend
-    cd code-challenge-fe
-    npm install
-    ng serve --open
+3. Start Elasticsearch:
+
+```bash
+docker compose up searcher
+```
+
+4. Start the backend:
+
+```bash
+cd code-challenge-be
+composer install
+php artisan key:generate
+php artisan migrate
+php artisan serve
+```
+
+5. Start the frontend (new terminal):
+
+```bash
+cd code-challenge-fe
+npm install
+ng serve --open
+```
 
 Then open:
+
 - App: http://localhost:4200/
 - API example: http://127.0.0.1:8000/api/customers
 - Search: http://127.0.0.1:8000/api/customers?search=Jane
