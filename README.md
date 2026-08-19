@@ -46,7 +46,7 @@ Stop with `Ctrl+C` or docker compose down
 
 
 4. Start Elasticsearch
-docker compose up searcher
+    docker compose up searcher
 
 5. Start backend
     cd code-challenge-be

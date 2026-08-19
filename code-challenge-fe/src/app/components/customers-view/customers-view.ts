@@ -23,6 +23,14 @@ export class CustomersView {
     contact: new FormControl(''),
   });
   constructor(private dataService: DataService, private route: ActivatedRoute) { }
+
+  allowContactChars(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const filtered = input.value.replace(/[^0-9+]/g, '');
+    if (input.value !== filtered) {
+      this.customerForm.controls.contact.setValue(filtered);
+    }
+  }
   
   ngOnInit() {
     const id = Number(this.route.snapshot.params['id']);

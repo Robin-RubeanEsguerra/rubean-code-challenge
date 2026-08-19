@@ -9,12 +9,11 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Spinner } from '../spinner/spinner';
-import { CustomersView } from '../customers-view/customers-view';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-table',
-  imports: [FormsModule, ReactiveFormsModule, Spinner, CustomersView],
+  imports: [FormsModule, ReactiveFormsModule, Spinner],
   templateUrl: './table.html',
   styleUrl: './table.scss',
 })
@@ -43,6 +42,14 @@ export class Table implements OnInit {
     private dataService: DataService,
     private router: Router,
   ) {}
+
+  allowContactChars(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const filtered = input.value.replace(/[^0-9+]/g, '');
+    if (input.value !== filtered) {
+      this.customerForm.controls.contact.setValue(filtered);
+    }
+  }
 
   ngOnInit() {
     this.getCustomersData();
